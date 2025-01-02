@@ -1,25 +1,30 @@
-import express, { Application } from 'express';
-import { connectToMongoDB } from './db/mydb';
+import express from 'express';
+import connectDbMongo from './config/db';
 import userRoutes from './routes/userRoutes';
+import cors from "cors";
+const app = express();
+const PORT = 5001;
 
-const app: Application = express();
+// Connect to MongoDB 
+connectDbMongo();
 
-// Middleware to parse JSON requests
+//for cors error
+var corsOptions = {
+    origin: function (origin: any, callback: any) {
+        callback(null, true);
+    },
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+// to convert the response to json
 app.use(express.json());
 
-// Connect to MongoDB before starting the server
-connectToMongoDB();
-
-// Use the user routes
-app.use('/users', userRoutes);
-
-// Basic route for health check
-app.get('/', (req:any, res:any) => {
-    res.send('Welcome to the MongoDB Express App');
-});
+// Use user routes for API
+app.use('/', userRoutes);
 
 // Start the server
-const PORT: number = 8080;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

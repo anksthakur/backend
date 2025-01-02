@@ -1,10 +1,13 @@
-import { Router } from 'express';
-import { getUsers, addUser } from "../controllers/userControllers";
+import express from 'express';
+import { getuserData, loginUser, signupUser } from '../controllers/userControllers';
 
-const router: Router = Router();
+// Create a router
+const router = express.Router();
 
-// routes
-router.get('/', getUsers);      // Get all users
-router.post('/', addUser);      // Add a new user
+// Define the routes
+router.post('/auth/signup', signupUser);
+router.post('/auth/login', loginUser);
+router.get('/checktoken',getuserData)
 
+// Export the router
 export default router;
