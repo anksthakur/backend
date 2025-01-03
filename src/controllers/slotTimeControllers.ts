@@ -13,7 +13,6 @@ export const slotBook = async (req: Request, res: Response) => {
             res.status(400).json({ message: 'weekname already exists' });
         } 
         if (existingSlot) {
-
             res.status(400).json({ message: "slot already exists" })
         }
         // Create a new slot
