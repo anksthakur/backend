@@ -96,4 +96,3 @@ export const getuserData = async (req: Request, res: Response) => {
         }
     }
 }
-
