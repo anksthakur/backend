@@ -1,5 +1,4 @@
-// import { generateTokens } from "../utils/auth";
-import {UserslotData,  NewUserslotData } from "../models/userData";
+import { UserslotData, NewUserslotData } from "../models/userData";
 import { Request, Response } from 'express';
 
 export const getuserDataHome = async (req: Request, res: Response) => {
@@ -8,8 +7,8 @@ export const getuserDataHome = async (req: Request, res: Response) => {
         if (allUserData.length === 0) {
             res.status(404).json({ message: 'No data found in the database' });
         }
-        const { weekday, slotTime } = req.query;
-        if (!weekday && !slotTime) {
+        const { weekday, slotTime,userId } = req.query;
+        if (!weekday && !slotTime && !userId) {
             res.status(200).json({
                 data: allUserData,
                 message: 'All user data retrieved successfully'
@@ -18,7 +17,8 @@ export const getuserDataHome = async (req: Request, res: Response) => {
         // Filtered response based on query parameters
         const matchedUser = await UserslotData.find({
             ...(weekday && { weekday }),
-            ...(slotTime && { slotTime })
+            ...(slotTime && { slotTime }),
+            ...(userId &&{userId})
         });
         res.status(200).json({
             data: matchedUser,
@@ -31,23 +31,29 @@ export const getuserDataHome = async (req: Request, res: Response) => {
 
 
 export const newUserslots = async (req: Request, res: Response) => {
-    const { weekday, slotTime } = req.body;
-    if (!weekday || !slotTime) {
+    const { weekday, slotTime, userId } = req.body;
+    if (!weekday || !slotTime || !userId) {
         res.status(400).json({ message: 'Please provide all fields ' });
     }
     try {
         const existingSlot = await NewUserslotData.findOne({ weekday });
         const existingUserTime = await NewUserslotData.findOne({ slotTime });
-        if (existingSlot) {
+        const matchedUser = await NewUserslotData.findOne({userId});
+        console.log("========================", matchedUser);
+        if (existingSlot === weekday) {
             res.status(400).json({ message: 'User with this weekday already exists' });
         }
-        if (existingUserTime) {
+        if (existingUserTime === slotTime) {
             res.status(400).json({ message: "slot already exists" })
+        }
+        if (matchedUser === userId) {
+           res.status(400).json({ message: "user id already exists" })
         }
         // Create a new slot
         const newUser = new NewUserslotData({
             weekday,
-            slotTime
+            slotTime,
+            userId,
         });
         // Save the new slot to the database
         await newUser.save();

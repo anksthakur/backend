@@ -69,7 +69,7 @@ export const getuserData = async (req: Request, res: Response) => {
     }
     try {
         var { data } = await checkAccessToken(token);
-        console.log(data);
+        // console.log(data);
         let userId = data.user?._id
 
         if (!userId) {
