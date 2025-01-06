@@ -2,7 +2,9 @@ import express from 'express';
 import connectDbMongo from './config/db';
 import userRoutes from './routes/userRoutes';
 import cors from "cors";
+
 import slotRouter from './routes/slotRoutes';
+import routerUser from './routes/userData';
 const app = express();
 const PORT = 5001;
 
@@ -25,6 +27,7 @@ app.use(express.json());
 // Use user routes for API
 app.use('/', userRoutes);
 app.use('/', slotRouter);
+app.use('/', routerUser)
 
 // Start the server
 app.listen(PORT, () => {
