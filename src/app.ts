@@ -1,15 +1,11 @@
 import express from 'express';
+import cors from "cors";
 import connectDbMongo from './config/db';
 import userRoutes from './routes/userRoutes';
-import cors from "cors";
-
 import slotRouter from './routes/slotRoutes';
 import routerUser from './routes/userData';
 const app = express();
 const PORT = 5001;
-
-// Connect to MongoDB 
-connectDbMongo();
 
 //for cors error
 var corsOptions = {
@@ -18,7 +14,6 @@ var corsOptions = {
     },
     credentials: true,
 };
-
 app.use(cors(corsOptions));
 
 // to convert the response to json
@@ -29,6 +24,8 @@ app.use('/', userRoutes);
 app.use('/', slotRouter);
 app.use('/', routerUser)
 
+// Connect to MongoDB 
+connectDbMongo();
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

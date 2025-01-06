@@ -1,4 +1,4 @@
-import { generateTokens } from "../utils/auth";
+// import { generateTokens } from "../utils/auth";
 import {UserslotData,  NewUserslotData } from "../models/userData";
 import { Request, Response } from 'express';
 
@@ -32,7 +32,6 @@ export const getuserDataHome = async (req: Request, res: Response) => {
 
 export const newUserslots = async (req: Request, res: Response) => {
     const { weekday, slotTime } = req.body;
-    // Basic validation to check if fields are provided
     if (!weekday || !slotTime) {
         res.status(400).json({ message: 'Please provide all fields ' });
     }
@@ -49,12 +48,10 @@ export const newUserslots = async (req: Request, res: Response) => {
         const newUser = new NewUserslotData({
             weekday,
             slotTime
-
         });
         // Save the new slot to the database
         await newUser.save();
-        var { accessToken } = await generateTokens(newUser?.id);
-        res.status(200).json({ newUser, accessToken, message: 'User registered successfully' });
+        res.status(200).json({ newUser, message: 'User registered successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
