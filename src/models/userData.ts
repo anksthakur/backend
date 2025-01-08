@@ -7,13 +7,11 @@ interface IUser extends Document {
 }
 
 // User schema
-const userSchema: Schema = new Schema(
-  {
-    weekday: { type: String, required: true },
-    slotTime: { type: String, required: true },
-    userId: { type: String, required: true },
-  },
-);
+const userSchema: Schema = new Schema({
+  weekday: { type: String, required: false },
+  slotTime: { type: String, required: false },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+});
 
 // Create and export the models
 const UserslotData = mongoose.model<IUser>('slots', userSchema);
