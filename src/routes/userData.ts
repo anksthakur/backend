@@ -8,6 +8,7 @@ const routerUser = express.Router();
 routerUser.get('/userdata',getuserDataHome);
 routerUser.post('/userdata',newUserslots);
 routerUser.get('/userbookeddata',getuserBookData)
+// routerUser.get('/alluserbookeddata',getAllUserBookData)
 
 // Export the router
 export default routerUser;
