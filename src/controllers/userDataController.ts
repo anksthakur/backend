@@ -65,49 +65,6 @@ export const newUserslots = async (req: Request, res: Response) => {
   }
 };
 
-// export const getuserBookData = async (req: Request, res: Response) => {
-//   try {
-//     const { userId } = req.query;
-//     if (!userId) {
-//       res.status(400).json({ message: "Required fields missing" });
-//     }
-//     // Convert userId to ObjectId if it's a string
-//     const objectIdUserId = new mongoose.Types.ObjectId(userId as string);
-//     // Build aggregation pipeline
-//     const pipeline: any[] = [
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "userId",
-//           foreignField: "_id",
-//           as: "userDetails",
-//         },
-//       },
-//       {
-//         $match: {
-//           userId: objectIdUserId,
-//         },
-//       },
-//     ];
-//     // Execute the aggregation pipeline
-//     const existingSlot = await NewUserslotData.aggregate(pipeline);
-
-//     // If slot already exists
-//     if (existingSlot.length > 0) {
-//       res.status(200).json({
-//         data: existingSlot,
-//         message: "Slot already booked",
-//       });
-//     }
-//     res.status(201).json({
-//       message: "Slot booked successfully",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
 export const getuserBookData = async (req: Request, res: Response) => {
   try {
     const { userId, role } = req.query;
@@ -124,8 +81,7 @@ export const getuserBookData = async (req: Request, res: Response) => {
         },
       },
     ];
-
-    // Role-based access control
+    // Role-based access
     if (role === "admin") {
       // Admin can access all data
     } else if (role === "user" && userId) {
@@ -138,10 +94,8 @@ export const getuserBookData = async (req: Request, res: Response) => {
     } else {
      res.status(403).json({ message: "Access denied" });
     }
-
     // Execute the aggregation pipeline
     const bookedSlots = await NewUserslotData.aggregate(pipeline);
-
     // Return data
     if (bookedSlots.length > 0) {
       res.status(200).json({
@@ -158,3 +112,4 @@ export const getuserBookData = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+ 
